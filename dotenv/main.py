@@ -90,17 +90,18 @@ def parse_stream(stream):
 
 class DotEnv():
 
-    def __init__(self, dotenv_path, verbose=False):
+    def __init__(self, dotenv_path, verbose=False, encoding='utf-8'):
         self.dotenv_path = dotenv_path
         self._dict = None
         self.verbose = verbose
+        self.encoding = encoding
 
     @contextmanager
     def _get_stream(self):
         if isinstance(self.dotenv_path, StringIO):
             yield self.dotenv_path
         elif os.path.isfile(self.dotenv_path):
-            with io.open(self.dotenv_path) as stream:
+            with io.open(self.dotenv_path, encoding=self.encoding) as stream:
                 yield stream
         else:
             if self.verbose:
@@ -304,14 +305,21 @@ def find_dotenv(filename='.env', raise_error_if_not_found=False, usecwd=False):
     return ''
 
 
-def load_dotenv(dotenv_path=None, stream=None, verbose=False, override=False):
+def load_dotenv(dotenv_path=None,
+                stream=None,
+                verbose=False,
+                override=False,
+                encoding='utf-8'):
     f = dotenv_path or stream or find_dotenv()
-    return DotEnv(f, verbose=verbose).set_as_environment_variables(override=override)
+    return DotEnv(f, verbose=verbose, encoding=encoding).set_as_environment_variables(override=override)
 
 
-def dotenv_values(dotenv_path=None, stream=None, verbose=False):
+def dotenv_values(dotenv_path=None,
+                  stream=None,
+                  verbose=False,
+                  encoding='utf-8'):
     f = dotenv_path or stream or find_dotenv()
-    return DotEnv(f, verbose=verbose).dict()
+    return DotEnv(f, verbose=verbose, encoding=encoding).dict()
 
 
 def run_command(command, env):
