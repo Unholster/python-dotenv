@@ -309,17 +309,17 @@ def load_dotenv(dotenv_path=None,
                 stream=None,
                 verbose=False,
                 override=False,
-                encoding='utf-8'):
+                **kwargs):
     f = dotenv_path or stream or find_dotenv()
-    return DotEnv(f, verbose=verbose, encoding=encoding).set_as_environment_variables(override=override)
+    return DotEnv(f, verbose=verbose, **kwargs).set_as_environment_variables(override=override)
 
 
 def dotenv_values(dotenv_path=None,
                   stream=None,
                   verbose=False,
-                  encoding='utf-8'):
+                  **kwargs):
     f = dotenv_path or stream or find_dotenv()
-    return DotEnv(f, verbose=verbose, encoding=encoding).dict()
+    return DotEnv(f, verbose=verbose, **kwargs).dict()
 
 
 def run_command(command, env):
